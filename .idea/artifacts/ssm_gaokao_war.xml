@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ssm-gaokao:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ssm-gaokao</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ssm-bbms.war">
+      <element id="artifact" artifact-name="ssm-gaokao:war exploded" />
+    </root>
+  </artifact>
+</component>

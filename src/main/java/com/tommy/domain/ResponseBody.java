@@ -1,20 +1,15 @@
 package com.tommy.domain;
 
-//import cn.xueden.common.DateUtil;
 import com.tommy.common.DateUtil;
 
 import java.io.Serializable;
 
 /**
  * 功能描述：封装响应的数据结构
- * @Auther:http://www.xueden.cn
- * @Date:2019/12/12
- * @Description:cn.xueden.model
- * @version:1.0
  */
 public class ResponseBody<T> implements Serializable {
     //时间
-    private String date= DateUtil.getCurrentDateStr("yyyy-MM-dd HH:mm:ss");
+    private String date = DateUtil.getCurrentDateStr("yyyy-MM-dd HH:mm:ss");
     //状态码 默认200响应成功
     private int status=200;
     //接口返回的数据

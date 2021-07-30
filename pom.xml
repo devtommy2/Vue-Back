@@ -56,6 +56,7 @@
 
     <!--在基础IOC功能上提供扩展服务，此外还提供许多企业级服务的支持，
       有邮件服务、任务调度、JNDI定位，EJB集成、远程访问、缓存以及多种视图层框架的支持-->
+<!--   springMVC依赖-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
@@ -92,6 +93,7 @@
 
     <!--包含Web应用开发时，用到Spring框架时所需的核心类，
       包括自动载入WebApplicationContext特性的类、Struts与JSF集成类、文件上传的支持类、Filter类和大量工具辅助类-->
+<!--    springMVC依赖-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
@@ -101,6 +103,8 @@
     <!--包含SpringMVC框架相关的所有类。
    包含国际化、标签、Theme、视图展现的FreeMarker、JasperReports、Tiles、Velocity、XSLT相关类。
    当然，如果你的应用使用了独立的MVC框架，则无需这个JAR文件里的任何类-->
+
+<!--    springMVC依赖-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>

@@ -4,6 +4,7 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/tx
@@ -11,7 +12,7 @@
          http://www.springframework.org/schema/aop
          http://www.springframework.org/schema/aop/spring-aop.xsd
          http://www.springframework.org/schema/context
-         http://www.springframework.org/schema/context/spring-context.xsd">
+         http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!-- 开启注解扫描，因为spring和springMVC是父子容器，但是它们有各自独立性，这里排除Controller层，
 如果不排除，都全部扫描，就可能会出现Controller的方法无法拦截、Bean被多次加载等问题；-->
     <context:component-scan base-package="com.tommy">
@@ -84,4 +85,7 @@
         <!--建立事务与切入点之间的关系-->
         <aop:advisor advice-ref="txAdvice" pointcut-ref="pt"/>
     </aop:config>
+
+
+
 </beans>

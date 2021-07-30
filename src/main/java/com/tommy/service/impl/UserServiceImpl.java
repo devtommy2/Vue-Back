@@ -17,4 +17,19 @@ public class UserServiceImpl implements UserService {
     public int queryUser(Map<String, Object> map) {
         return userDao.queryUser(map);
     }
+
+    @Override
+    public int queryUserbyUsername(String username) {
+        return userDao.queryUserbyUsername(username);
+    }
+
+    @Override
+    public void addUser(Map<String, Object> map) {
+        userDao.addUser(map);
+    }
+
+    @Override
+    public void updateUser(Map<String, Object> map) {
+        userDao.updateUser(map);
+    }
 }

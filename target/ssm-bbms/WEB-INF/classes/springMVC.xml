@@ -32,4 +32,14 @@
 <!--提供Controller请求转发，json自动转换等功能-->
     <mvc:annotation-driven></mvc:annotation-driven>
 
+    <!-- 解决API接口跨域问题配置 Spring MVC 版本必须是 4.2 及以上 -->
+
+    <mvc:cors>
+        <mvc:mapping path="/**"
+                     allowed-origins="*"
+                     allowed-methods="POST, GET, OPTIONS, DELETE, PUT"
+                     allowed-headers="Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+                     allow-credentials="true" />
+    </mvc:cors>
+
 </beans>

@@ -5,7 +5,42 @@
 <mapper namespace="com.tommy.dao.UserDao">
     
     <select id="queryUser" parameterType="map" resultType="int">
-        select count(1) from tbuser where userName = #{userName} and password = #{password}
+        select
+               count(1)
+        from
+             t_student_information
+        where
+              username = #{username} and password = #{password}
     </select>
+
+    <select id="queryUserbyUsername" parameterType="string" resultType="int" >
+        select
+               count(1)
+        from
+             t_student_information
+        where
+              username = #{username}
+    </select>
+
+    <insert id="addUser" parameterType="map" keyProperty="id" >
+        insert into
+            t_student_information(st_name, st_mark, st_mobile, username, password)
+        values
+            (#{st_name}, #{st_mark}, #{st_mobile}, #{username}, #{password})
+    </insert>
+
+    <update id="updateUser" parameterType="map" >
+        update
+            t_student_information
+        set
+            st_name = #{st_name}, st_mark = #{st_mark}, st_mobile = #{st_mobile}
+        where
+              username = #{username}
+    </update>
+
+    <update id="changePassword" parameterType="map">
+        update t_student_information set password = #{password}
+    </update>
+
 
 </mapper>
