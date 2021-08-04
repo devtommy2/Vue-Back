@@ -7,6 +7,7 @@ import java.io.Serializable;
  *
  * 其中的必填数据为username和password
  */
+
 public class User implements Serializable {
     private Integer id;
     private String st_name;

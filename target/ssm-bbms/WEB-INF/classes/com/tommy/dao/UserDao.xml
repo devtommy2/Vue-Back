@@ -24,9 +24,9 @@
 
     <insert id="addUser" parameterType="map" keyProperty="id" >
         insert into
-            t_student_information(st_name, st_mark, st_mobile, username, password)
+            t_student_information(st_name, st_mark, st_mobile, username, password, identity )
         values
-            (#{st_name}, #{st_mark}, #{st_mobile}, #{username}, #{password})
+            (#{st_name}, #{st_mark}, #{st_mobile}, #{username}, #{password}, "editor")
     </insert>
 
     <update id="updateUser" parameterType="map" >
@@ -39,8 +39,16 @@
     </update>
 
     <update id="changePassword" parameterType="map">
-        update t_student_information set password = #{password}
+        update t_student_information set password = #{password} where username = #{username}
     </update>
+
+    <select id="getIdentity" parameterType="string" resultType="string" >
+        select identity from t_student_information where username = #{username}
+    </select>
+
+    <select id="showUniversity" resultType="university">
+        select * from t_university
+    </select>
 
 
 </mapper>

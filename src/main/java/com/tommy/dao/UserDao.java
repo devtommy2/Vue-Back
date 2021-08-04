@@ -1,5 +1,8 @@
 package com.tommy.dao;
 
+import com.tommy.domain.University;
+
+import java.util.List;
 import java.util.Map;
 
 public interface UserDao {
@@ -19,5 +22,10 @@ public interface UserDao {
 //    修改密码的实现：
     void changePassword(Map<String, Object> map);
 
+//    通过用户名获取用户身份
+    String getIdentity(String username);
+
+//    获取所有的学校
+    List<University> showUniversity();
 
 }

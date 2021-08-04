@@ -1,7 +1,5 @@
 package com.tommy.domain;
 
-import com.tommy.common.DateUtil;
-
 import java.io.Serializable;
 
 /**
