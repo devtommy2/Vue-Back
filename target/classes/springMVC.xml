@@ -47,8 +47,9 @@
             <!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
             <mvc:mapping path="/**" />
             <!-- /register 和 /login 不需要拦截-->
-            <mvc:exclude-mapping path="/SignUp" />
-            <mvc:exclude-mapping path="/Login" />
+            <mvc:exclude-mapping path="/User/SignUp" />
+            <mvc:exclude-mapping path="/User/Login" />
+            <mvc:exclude-mapping path="/User/selectUniversityByCity" />
             <bean class="com.tommy.common.JwtInterceptor"></bean>
         </mvc:interceptor>
         <!-- 当设置多个拦截器时，先按顺序调用preHandle方法 -->

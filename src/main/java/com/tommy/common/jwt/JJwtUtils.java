@@ -16,9 +16,6 @@ public class JJwtUtils {
      * @return
      */
 
-//    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);  // 随机密钥,安全系数高    ====== failure
-//    private String secretString = Encoders.BASE64.encode(key.getEncoded());
-//    private SecretKey key2 = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretString));
 
     final String SECRET = "dG9tbXlhc2Rhc2Rhc2Rhc2RnZmdkZmdnaHRyZ2dkZmI=";
     byte[] secret = Base64.getDecoder().decode(SECRET);

@@ -2,17 +2,35 @@ package com.tommy.domain;
 
 public class University {
 
+    /**
+     * id
+     * Name
+     * Manage
+     * Position
+     * Level
+     * Province
+     * s985
+     * s211
+     * FirstClassUniversity
+     * FirstClassDiscipline
+     * Postgraduate
+     * Major
+     * LowestAdmission
+     * EnrollmentYear
+     * AdmissionsRestrictions
+     *
+     */
     private Integer KEY;
-    private String U_NAME;
-    private String ADMIN_DEPARTMENT;
-    private String U_CITY;
-    private String U_LEVEL;
-    private String U_PROVINCE;
-    private String _985;
-    private String _211;
-    private String 一流大学建设高校;
-    private String 一流学科建设高校;
-    private String 研究生院;
+    private String Name;
+    private String Manage;
+    private String Position;
+    private String Level;
+    private String Province;
+    private String s985;
+    private String s211;
+    private String FirstClassUniversity;
+    private String FirstClassDiscipline;
+    private String Postgraduate;
 
     public Integer getKEY() {
         return KEY;
@@ -22,100 +40,100 @@ public class University {
         this.KEY = KEY;
     }
 
-    public String getU_NAME() {
-        return U_NAME;
+    public String getName() {
+        return Name;
     }
 
-    public void setU_NAME(String u_NAME) {
-        U_NAME = u_NAME;
+    public void setName(String name) {
+        Name = name;
     }
 
-    public String getADMIN_DEPARTMENT() {
-        return ADMIN_DEPARTMENT;
+    public String getManage() {
+        return Manage;
     }
 
-    public void setADMIN_DEPARTMENT(String ADMIN_DEPARTMENT) {
-        this.ADMIN_DEPARTMENT = ADMIN_DEPARTMENT;
+    public void setManage(String manage) {
+        Manage = manage;
     }
 
-    public String getU_CITY() {
-        return U_CITY;
+    public String getPosition() {
+        return Position;
     }
 
-    public void setU_CITY(String u_CITY) {
-        U_CITY = u_CITY;
+    public void setPosition(String position) {
+        Position = position;
     }
 
-    public String getU_LEVEL() {
-        return U_LEVEL;
+    public String getLevel() {
+        return Level;
     }
 
-    public void setU_LEVEL(String u_LEVEL) {
-        U_LEVEL = u_LEVEL;
+    public void setLevel(String level) {
+        Level = level;
     }
 
-    public String getU_PROVINCE() {
-        return U_PROVINCE;
+    public String getProvince() {
+        return Province;
     }
 
-    public void setU_PROVINCE(String u_PROVINCE) {
-        U_PROVINCE = u_PROVINCE;
+    public void setProvince(String province) {
+        Province = province;
     }
 
-    public String get_985() {
-        return _985;
+    public String getS985() {
+        return s985;
     }
 
-    public void set_985(String _985) {
-        this._985 = _985;
+    public void setS985(String s985) {
+        this.s985 = s985;
     }
 
-    public String get_211() {
-        return _211;
+    public String getS211() {
+        return s211;
     }
 
-    public void set_211(String _211) {
-        this._211 = _211;
+    public void setS211(String s211) {
+        this.s211 = s211;
     }
 
-    public String get一流大学建设高校() {
-        return 一流大学建设高校;
+    public String getFirstClassUniversity() {
+        return FirstClassUniversity;
     }
 
-    public void set一流大学建设高校(String 一流大学建设高校) {
-        this.一流大学建设高校 = 一流大学建设高校;
+    public void setFirstClassUniversity(String firstClassUniversity) {
+        FirstClassUniversity = firstClassUniversity;
     }
 
-    public String get一流学科建设高校() {
-        return 一流学科建设高校;
+    public String getFirstClassDiscipline() {
+        return FirstClassDiscipline;
     }
 
-    public void set一流学科建设高校(String 一流学科建设高校) {
-        this.一流学科建设高校 = 一流学科建设高校;
+    public void setFirstClassDiscipline(String firstClassDiscipline) {
+        FirstClassDiscipline = firstClassDiscipline;
     }
 
-    public String get研究生院() {
-        return 研究生院;
+    public String getPostgraduate() {
+        return Postgraduate;
     }
 
-    public void set研究生院(String 研究生院) {
-        this.研究生院 = 研究生院;
+    public void setPostgraduate(String postgraduate) {
+        Postgraduate = postgraduate;
     }
 
     @Override
     public String toString() {
         return "University{" +
                 "KEY=" + KEY +
-                ", U_NAME='" + U_NAME + '\'' +
-                ", ADMIN_DEPARTMENT='" + ADMIN_DEPARTMENT + '\'' +
-                ", U_CITY='" + U_CITY + '\'' +
-                ", U_LEVEL='" + U_LEVEL + '\'' +
-                ", U_PROVINCE='" + U_PROVINCE + '\'' +
-                ", _985='" + _985 + '\'' +
-                ", _211='" + _211 + '\'' +
-                ", 一流大学建设高校='" + 一流大学建设高校 + '\'' +
-                ", 一流学科建设高校='" + 一流学科建设高校 + '\'' +
-                ", 研究生院='" + 研究生院 + '\'' +
+                ", Name='" + Name + '\'' +
+                ", Manage='" + Manage + '\'' +
+                ", Position='" + Position + '\'' +
+                ", Level='" + Level + '\'' +
+                ", Province='" + Province + '\'' +
+                ", s985='" + s985 + '\'' +
+                ", s211='" + s211 + '\'' +
+                ", FirstClassUniversity='" + FirstClassUniversity + '\'' +
+                ", FirstClassDiscipline='" + FirstClassDiscipline + '\'' +
+                ", Postgraduate='" + Postgraduate + '\'' +
                 '}';
     }
 }

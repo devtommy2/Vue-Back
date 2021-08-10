@@ -14,6 +14,7 @@
          http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 开启注解扫描，因为spring和springMVC是父子容器，但是它们有各自独立性，这里排除Controller层，
 如果不排除，都全部扫描，就可能会出现Controller的方法无法拦截、Bean被多次加载等问题；-->
+<!--    注意，controller层的扫描已经在springMVC中进行了，这里不需要重复进行扫描-->
     <context:component-scan base-package="com.tommy">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
@@ -36,7 +37,7 @@
 
     <!--配置SqlSessionFactory对象-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="datSource"></property>
+        <property name="dataSource" ref="datSource" />
         <property name="configLocation" value="classpath:mybatis.xml"/>
         <property name="mapperLocations" value="classpath:com/tommy/dao/*.xml"/>
     </bean>
@@ -45,12 +46,16 @@
     <bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.tommy.dao"/>
     </bean>
+<!--    创建dao实体类-->
 
     <!--配置spring框架声明式事务管理-->
     <!--配置事务管理器-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="datSource"/>
     </bean>
+
+<!--下面是事务管理器的配置-->
+    <tx:annotation-driven transaction-manager="transactionManager" />
 
     <!--配置事务通知-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">

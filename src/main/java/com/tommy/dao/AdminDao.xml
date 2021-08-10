@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tommy.dao.AdminDao">
+<!--=======================================             bug     -->
+    <select id="showUserExceptAdmin" resultType="user">
+        select * from t_student_information where identity = #{identity}
+    </select>
+<!--=================                 ======================-->
+    <select id="showSingleUserExceptAdmin" parameterType="string" resultType="user">
+        select * from t_student_information where username = #{username}
+    </select>
+
+    <update id="adminUpdateUserInformation" parameterType="map" >
+        update
+            t_student_information
+        set
+            st_name = #{st_name}, st_mark = #{st_mark}, st_mobile = #{st_mobile}
+        where
+              username = #{username}
+    </update>
+
+    <insert id="adminTeacherSignUp" parameterType="map" >
+        insert into t_student_information(username, password, st_mobile, st_name, identity)
+        values (#{username}, #{password}, #{st_mobile}, #{st_name}, "teacher")
+    </insert>
+
+    <select id="quaryUsernameIfExist" parameterType="string" resultType="int" >
+        select count(1) from t_student_information where username = #{username}
+    </select>
+
+    <delete id="deleteStuInfoByUsername" parameterType="string">
+        delete from t_student_information where username = #{username}
+    </delete>
+
+    <select id="quaryStuIdByUsername" resultType="int" >
+        select id from t_student_information where username = #{username}
+    </select>
+
+    <select id="quaryTeacherIdByStuUsername" parameterType="string" resultType="int" >
+        select teacher_id from t_student_information where username = #{username}
+    </select>
+
+    <select id="quaryIfExistStudent" parameterType="map" resultType="int" >
+        select count(1) from t_teacher_student where teacher_id = #{teacher_id} and student_id = #{student_id}
+    </select>
+
+    <select id="selectTeacherIdByUsername" parameterType="string" resultType="int" >
+        select id from t_student_information where username = #{username}
+    </select>
+
+    <delete id="deleteLineFormTeacherStudent" parameterType="int" >
+        delete from t_teacher_student where student_id = #{student_id}
+    </delete>
+
+
+</mapper>

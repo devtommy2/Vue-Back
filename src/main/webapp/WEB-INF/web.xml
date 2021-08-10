@@ -40,6 +40,7 @@
   </filter-mapping>
 
   <!--配置spring的监听器，默认加载WEB-INF目录下的applicationContext.xml配置文件-->
+<!-- 监听器-->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>

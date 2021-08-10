@@ -22,11 +22,11 @@
               username = #{username}
     </select>
 
-    <insert id="addUser" parameterType="map" keyProperty="id" >
+    <insert id="addUserToTable" parameterType="map" keyProperty="id">
         insert into
-            t_student_information(st_name, st_mark, st_mobile, username, password, identity )
+            t_student_information(st_name, st_mark, st_mobile, username, password, identity, st_number)
         values
-            (#{st_name}, #{st_mark}, #{st_mobile}, #{username}, #{password}, "editor")
+            (#{st_name}, #{st_mark}, #{st_mobile}, #{username}, #{password}, "editor", #{st_number})
     </insert>
 
     <update id="updateUser" parameterType="map" >
@@ -49,6 +49,123 @@
     <select id="showUniversity" resultType="university">
         select * from t_university
     </select>
+
+    <select id="showUniversity_cache" resultType="university_cache">
+        select * from t_university
+    </select>
+
+    <insert id="addUser" parameterType="map" >
+        insert into
+            t_student_information(username, password, st_name, st_mobile, st_mark, identity)
+        values(#{username}, #{password}, #{st_name}, #{st_mobile}, #{st_mark}, "editor")
+    </insert>
+
+    <select id="showMajor" resultType="major">
+        select * from major
+    </select>
+
+    <select id="showTeacher" resultType="teacher" >
+        select id, st_mobile, st_name, username from t_student_information where identity = "teacher"
+    </select>
+
+    <update id="insertTeacherId" parameterType="map" >
+        update t_student_information set teacher_id = #{teacher_id} where username = #{username}
+    </update>
+
+    <select id="selectUniversityByCity" parameterType="string" resultType="university_cache" >
+        select * from t_university where Position = #{city}
+    </select>
+
+    <select id="selectStudentIdByUsername" resultType="int" parameterType="string" >
+        select id from t_student_information where username = #{username}
+    </select>
+
+    <update id="clearCache" >
+        truncate table cache
+    </update>
+
+    <select id="selectCache" resultType="university" >
+        select * from cache
+    </select>
+
+    <select id="selectCache_finally" resultType="university" >
+        select * from cache where student_id = #{student_id}
+    </select>
+
+    <insert id="insertListToCache" parameterType="university" >
+        insert into cache(KEY, Name , Manage, Position, Level, Province, s985, s211, FirstClassUniversity, FirstClassDiscipline, Postgraduate)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (
+             #{item.KEY},
+             #{item.Name},
+             #{item.Manage},
+             #{item.Position},
+             #{item.Level},
+             #{item.Province},
+             #{item.s985},
+             #{item.s211},
+             #{item.FirstClassUniversity},
+             #{item.FirstClassDiscipline},
+             #{item.Postgraduate}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectCacheByLevelBaseOnCity" resultType="university" parameterType="string" >
+        select * from cache where ${level} = "T"
+    </select>
+
+    <insert id="insertListToCache_test" parameterType="university_cache" >
+        insert into cache(`student_id`, `KEY`, `Name`, `Manage`, `Position`, `Level`, `Province`, `s985`, `s211`, `FirstClassUniversity`, `FirstClassDiscipline`, `Postgraduate`)
+        values(#{student_id}, #{KEY}, #{Name}, #{Manage}, #{Position}, #{Level}, #{Province}, #{s985}, #{s211}, #{FirstClassUniversity}, #{FirstClassDiscipline}, #{Postgraduate})
+    </insert>
+
+
+    <delete id="deleteCacheBaseOnJYB" parameterType="int">
+        delete from cache where `Manage` != "教育部" and student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteCacheNameJYB" parameterType="int">
+        delete from cache where `Manage` = "教育部" and student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteCacheNot985" parameterType="int">
+        delete from cache where `s985` != "T" and student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteCacheNot211" parameterType="int">
+        delete from cache where `s211` != "T" and student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteCacheNotBK" parameterType="int">
+        delete from cache where `Level` != "本科" and student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteCacheNotZK" parameterType="int">
+        delete from cache where `Level` != "专科" and student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteCacheNotFirstRateUniversity" parameterType="int">
+        delete from cache where `FirstClassUniversity` != "T" and student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteCacheNotFirstClassDisciplineUniversity" parameterType="int">
+        delete from cache where `FirstClassDiscipline` != "T" and student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteCacheNotPostgraduate" >
+        delete from cache where `Postgraduate` != "T"
+    </delete>
+
+    <delete id="deleteCacheHavePostgraduate" >
+        delete from cache where `Postgraduate` = "T"
+    </delete>
+
+    <select id="selectInCities" parameterType="string" resultType="university_cache" >
+        select * from t_university where Position in ${cities}
+    </select>
+
 
 
 </mapper>

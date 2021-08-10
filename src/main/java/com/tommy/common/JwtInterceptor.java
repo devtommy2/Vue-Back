@@ -3,6 +3,8 @@ package com.tommy.common;
 import com.tommy.common.jwt.JJwtUtils;
 import com.tommy.domain.JWT;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +58,18 @@ public class JwtInterceptor implements HandlerInterceptor {
             // 在这里进行token验证
             JWT jwt = jwtUtils.checkJWT(tokenStr, username, identity);  // 进行结果校验
             if (jwt.getStatueCode() == 200 && jwt.getStatueMessage().equals("jwt验证成功")) {
+                Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+                if (url.contains("/Admin")) { // /Admin权限验证，非管理员无法进入管理员页面
+                    if (!jws.getBody().get("identity").equals("admin")) {
+                        response.setHeader("error_code", String.valueOf(4004));
+                        response.setHeader("error_message", "Permission verification failed");
+                        return false;
+                    } else {
+                        response.setHeader("error_code", String.valueOf(200));
+                        response.setHeader("error_message", jwt.getStatueMessage());
+                        return true;
+                    }
+                }
                 response.setHeader("error_code", String.valueOf(200));
                 response.setHeader("error_message", jwt.getStatueMessage());
 
