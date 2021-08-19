@@ -1,16 +1,17 @@
 package com.tommy.service.impl;
 
 import com.tommy.dao.UserDao;
-import com.tommy.domain.Major;
-import com.tommy.domain.Teacher;
-import com.tommy.domain.University;
-import com.tommy.domain.University_cache;
+import com.tommy.domain.*;
 import com.tommy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
+/**
+ * coding and debug by tommy
+ */
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,24 +45,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<University> showUniversity() {
-        return userDao.showUniversity();
-    }
-
-    @Override
-    public List<University_cache> showUniversity_cache() {
-        return userDao.showUniversity_cache();
-    }
-
-    @Override
     public void addUser(Map<String, Object> map) {
         userDao.addUser(map);
     }
 
-    @Override
-    public List<Major> showMajor() {
-        return userDao.showMajor();
-    }
 
     @Override
     public List<Teacher> showTeacher() {
@@ -74,98 +61,158 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<University_cache> selectUniversityByCity(String city) {
-        return userDao.selectUniversityByCity(city);
+    public List<University> selectAllCitiesUniversity(String condition) {
+        return userDao.selectAllCitiesUniversity(condition);
     }
 
     @Override
-    public void insertListToCache(List<University> universityList) {
-        userDao.insertListToCache(universityList);
+    public List<University> selectCitiesUniversity(String condition) {
+        return userDao.selectCitiesUniversity(condition);
     }
 
-//    @Override
-//    public int clearCache() {
-//        return userDao.clearCache();
-//    }
-//
-//    @Override
-//    public List<University> selectCache() {
-//        return userDao.selectCache();
-//    }
-//
-//    @Override
-//    public List<University> selectCacheByLevelBaseOnCity(String level) {
-//        return userDao.selectCacheByLevelBaseOnCity(level);
-//    }
-//
-//    @Override
-//    public void insertListToCache_test(University_cache university_cache) {
-//        userDao.insertListToCache_test(university_cache);
-//    }
-//
-//    @Override
-//    public void deleteCacheBaseOnJYB(Integer student_id) {
-//        userDao.deleteCacheBaseOnJYB(student_id);
-//    }
-//
-//    @Override
-//    public void deleteCacheNameJYB(Integer student_id) {
-//        userDao.deleteCacheNameJYB(student_id);
-//    }
-//
-//    @Override
-//    public void deleteCacheNot985(Integer student_id) {
-//        userDao.deleteCacheNot985(student_id);
-//    }
-//
-//    @Override
-//    public void deleteCacheNot211(Integer student_id) {
-//        userDao.deleteCacheNot211(student_id);
-//    }
-//
-//    @Override
-//    public void deleteCacheNotBK(Integer student_id) {
-//        userDao.deleteCacheNotBK(student_id);
-//    }
-//
-//    @Override
-//    public void deleteCacheNotZK(Integer student_id) {
-//        userDao.deleteCacheNotZK(student_id);
-//    }
-
     @Override
-    public Integer selectStudentIdByUsername(String username) {
-        return userDao.selectStudentIdByUsername(username);
+    public List<University> selectUniversityByFuzzyName(String Name) {
+        return userDao.selectUniversityByFuzzyName(Name);
     }
 
-//    @Override
-//    public void deleteCacheNotFirstRateUniversity(Integer student_id) {
-//        userDao.deleteCacheNotFirstRateUniversity(student_id);
-//    }
-//
-//    @Override
-//    public void deleteCacheNotFirstClassDisciplineUniversity(Integer student_id) {
-//        userDao.deleteCacheNotFirstClassDisciplineUniversity(student_id);
-//    }
-//
-//    @Override
-//    public List<University> selectCache_finally(Integer student_id) {
-//        return userDao.selectCache_finally(student_id);
-//    }
-//
-//    @Override
-//    public void deleteCacheNotPostgraduate() {
-//        userDao.deleteCacheNotPostgraduate();
-//    }
-//
-//    @Override
-//    public void deleteCacheHavePostgraduate() {
-//        userDao.deleteCacheHavePostgraduate();
-//    }
+    @Override
+    public List<Major> selectMajorByType(String condition) {
+        return userDao.selectMajorByType(condition);
+    }
 
     @Override
-    public List<University_cache> selectInCities(String cities) {
-        return userDao.selectInCities(cities);
+    public List<String> selectTypeDetails(String condition) {
+        return userDao.selectTypeDetails(condition);
+    }
+
+    @Override
+    public List<Major> getMajorByFuzzySelect(String condition) {
+        return userDao.getMajorByFuzzySelect(condition);
+    }
+
+    @Override
+    public List<Major> getMajorJustLimitLevel(String level) {
+        return userDao.getMajorJustLimitLevel(level);
+    }
+
+    @Override
+    public List<Major> getMajorByNeeds(String sqlstring) {
+        return userDao.getMajorByNeeds(sqlstring);
+    }
+
+    @Override
+    public Integer getStudentIdByUsername(String username) {
+        return userDao.getStudentIdByUsername(username);
+    }
+
+    @Override
+    public void insertIntoStudentUniversity(Integer student_id, Integer university_id) {
+        userDao.insertIntoStudentUniversity(student_id, university_id);
+    }
+
+    @Override
+    public int quaryUniversityIfExist(Integer student_id, Integer university_id) {
+        return userDao.quaryUniversityIfExist(student_id, university_id);
+    }
+
+    @Override
+    public List<Integer> getUniversityIdByStudentId(Integer student_id) {
+        return userDao.getUniversityIdByStudentId(student_id);
+    }
+
+    @Override
+    public List<University> getUniversityByUniversityList(String SQLString) {
+        return userDao.getUniversityByUniversityList(SQLString);
+    }
+
+    @Override
+    public void deleteUniversityIdByStudentId(Integer student_id, Integer university_id) {
+        userDao.deleteUniversityIdByStudentId(student_id, university_id);
+    }
+
+    @Override
+    public Integer getUniversityNums(Integer student_id) {
+        return userDao.getUniversityNums(student_id);
+    }
+
+    @Override
+    public List<T_Major> getMajorByUniversitySelected(String SQLString) {
+        return userDao.getMajorByUniversitySelected(SQLString);
+    }
+
+    @Override
+    public List<T_Major> getMajorWithoutUniversity(String SQLString) {
+        return userDao.getMajorWithoutUniversity(SQLString);
+    }
+
+    @Override
+    public void insertIntoStudentMajor(Integer student_id, Integer major_id) {
+        userDao.insertIntoStudentMajor(student_id, major_id);
+    }
+
+    @Override
+    public List<Integer> getMajorId(Integer student_id) {
+        return userDao.getMajorId(student_id);
+    }
+
+    @Override
+    public List<T_Major> getMajorByMajorId(String SQLString) {
+        return userDao.getMajorByMajorId(SQLString);
+    }
+
+    @Override
+    public int quaryMajorIfExist(Integer student_id, Integer major_id) {
+        return userDao.quaryMajorIfExist(student_id, major_id);
+    }
+
+    @Override
+    public void deleteMajorByStudent(Integer student_id, Integer major_id) {
+        userDao.deleteMajorByStudent(student_id, major_id);
+    }
+
+    @Override
+    public List<UserInformationShow> getUserInformation(Integer student_id) {
+        return userDao.getUserInformation(student_id);
+    }
+
+    @Override
+    public int countStudentUniversity(Integer student_id) {
+        return userDao.countStudentUniversity(student_id);
+    }
+
+    @Override
+    public List<Integer> getScoreLevel(Integer score) {
+        return userDao.getScoreLevel(score);
+    }
+
+    @Override
+    public List<T_Major> getAutoMajor(String SQLString) {
+        return userDao.getAutoMajor(SQLString);
+    }
+
+    @Override
+    public void insertAutoMajorToDatabase(String SQLString) {
+        userDao.insertAutoMajorToDatabase(SQLString);
+    }
+
+    @Override
+    public void deleteAutoMajor(Integer student_id, Integer major_id) {
+        userDao.deleteAutoMajor(student_id, major_id);
+    }
+
+    @Override
+    public List<Integer> getAutoMajorId(Integer student_id) {
+        return userDao.getAutoMajorId(student_id);
+    }
+
+    @Override
+    public void saveSelectedMajorOrder(String SQLString) {
+        userDao.saveSelectedMajorOrder(SQLString);
+    }
+
+    @Override
+    public void saveAutoMajorOrder(String SQLString) {
+        userDao.saveAutoMajorOrder(SQLString);
     }
 
 

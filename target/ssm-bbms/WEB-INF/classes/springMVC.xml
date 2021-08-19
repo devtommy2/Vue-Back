@@ -49,7 +49,11 @@
             <!-- /register 和 /login 不需要拦截-->
             <mvc:exclude-mapping path="/User/SignUp" />
             <mvc:exclude-mapping path="/User/Login" />
-            <mvc:exclude-mapping path="/User/selectUniversityByCity" />
+            <mvc:exclude-mapping path="/User/showUniversityByNeed" />
+            <mvc:exclude-mapping path="/User/getUniversityInformation" />
+            <mvc:exclude-mapping path="/User/showMajorByNeeds" />
+            <mvc:exclude-mapping path="/User/getUniversityByName" />
+            <mvc:exclude-mapping path="/User/showMajorByFuzzy" />
             <bean class="com.tommy.common.JwtInterceptor"></bean>
         </mvc:interceptor>
         <!-- 当设置多个拦截器时，先按顺序调用preHandle方法 -->

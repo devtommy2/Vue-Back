@@ -6,6 +6,8 @@ import java.io.Serializable;
  * 功能描述：用户实体类
  *
  * 其中的必填数据为username和password
+ *
+ * coding and debug by tommy
  */
 
 public class User implements Serializable {

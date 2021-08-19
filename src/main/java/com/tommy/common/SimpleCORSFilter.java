@@ -5,6 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
+/**
+ * code and debug by tommy
+ */
+
+
 public class SimpleCORSFilter implements Filter {
     private boolean isCross = false;
 
@@ -24,7 +30,7 @@ public class SimpleCORSFilter implements Filter {
             httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
             httpServletResponse.setHeader("Access-Control-Max-Age", "0");
             httpServletResponse.setHeader("Access-Control-Allow-Headers",
-                    "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token");
+                    "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token,username,identity");
             httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
             httpServletResponse.setHeader("XDomainRequestAllowed", "1");
         }

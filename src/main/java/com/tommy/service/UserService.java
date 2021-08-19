@@ -1,12 +1,14 @@
 package com.tommy.service;
 
-import com.tommy.domain.Major;
-import com.tommy.domain.Teacher;
-import com.tommy.domain.University;
-import com.tommy.domain.University_cache;
+import com.tommy.domain.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
+
+/**
+ * coding and debug by tommy
+ */
 
 public interface UserService {
 
@@ -14,60 +16,78 @@ public interface UserService {
 
     int queryUserbyUsername(String username);
 
-
     void updateUser(Map<String, Object> map);
 
     String getIdentity(String username);
 
     void changePassword(Map<String, Object> map);
 
-    List<University> showUniversity();
-    List<University_cache> showUniversity_cache();
-
     void addUser(Map<String, Object> map);
-
-    List<Major> showMajor();
 
     List<Teacher> showTeacher();
 
     void insertTeacherId(Map<String, Object> map);
 
-    List<University_cache> selectUniversityByCity(String city);
+    List<University> selectAllCitiesUniversity(String condition);
 
-    void insertListToCache(List<University> universityList);
+    List<University> selectCitiesUniversity(String condition);
 
-//    int clearCache();
-//
-//    List<University> selectCache();
-//
-//    List<University> selectCacheByLevelBaseOnCity(String level);
-//
-//    void insertListToCache_test(University_cache university_cache);
-//
-//    void deleteCacheBaseOnJYB(Integer student_id);
-//
-//    void deleteCacheNameJYB(Integer student_id);
-//
-//    void deleteCacheNot985(Integer student_id);
-//
-//    void deleteCacheNot211(Integer student_id);
-//
-//    void deleteCacheNotBK(Integer student_id);
-//
-//    void deleteCacheNotZK(Integer student_id);
+    List<University> selectUniversityByFuzzyName(String Name);
 
-    Integer selectStudentIdByUsername(String username);
+    List<Major> selectMajorByType(String condition);
 
-//    void deleteCacheNotFirstRateUniversity(Integer student_id);
-//
-//    void deleteCacheNotFirstClassDisciplineUniversity(Integer student_id);
-//
-//    List<University> selectCache_finally(Integer student_id);
-//
-//    void deleteCacheNotPostgraduate();
-//
-//    void deleteCacheHavePostgraduate();
+    List<String> selectTypeDetails(String condition);
 
-    List<University_cache> selectInCities(String cities);
+    List<Major> getMajorByFuzzySelect(String condition);
+
+    List<Major> getMajorJustLimitLevel(String level);
+
+    List<Major> getMajorByNeeds(String sqlstring);
+
+    Integer getStudentIdByUsername(String username);
+
+    void insertIntoStudentUniversity(Integer student_id, Integer university_id);
+
+    int quaryUniversityIfExist(Integer student_id, Integer university_id);
+
+    List<Integer> getUniversityIdByStudentId(Integer student_id);
+
+    List<University> getUniversityByUniversityList(String SQLString);
+
+    void deleteUniversityIdByStudentId(Integer student_id, Integer university_id);
+
+    Integer getUniversityNums(Integer student_id);
+
+    List<T_Major> getMajorByUniversitySelected(String SQLString);
+
+    List<T_Major> getMajorWithoutUniversity(String SQLString);
+
+    void insertIntoStudentMajor(@Param("student_id") Integer student_id, @Param("major_id") Integer major_id);
+
+    List<Integer> getMajorId(Integer student_id);
+
+    List<T_Major> getMajorByMajorId(String SQLString);
+
+    int quaryMajorIfExist(Integer student_id, Integer major_id);
+
+    void deleteMajorByStudent(Integer student_id, Integer major_id);
+
+    List<UserInformationShow> getUserInformation(Integer student_id);
+
+    int countStudentUniversity(Integer student_id);
+
+    List<Integer> getScoreLevel(Integer score);
+
+    List<T_Major> getAutoMajor(String SQLString);
+
+    void insertAutoMajorToDatabase(String SQLString);
+
+    void deleteAutoMajor(@Param("student_id") Integer student_id, @Param("major_id") Integer major_id);
+
+    List<Integer> getAutoMajorId(Integer student_id);
+
+    void saveSelectedMajorOrder(String SQLString);
+
+    void saveAutoMajorOrder(String SQLString);
 
 }

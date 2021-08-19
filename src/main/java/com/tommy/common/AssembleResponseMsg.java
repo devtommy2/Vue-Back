@@ -8,6 +8,7 @@ public class AssembleResponseMsg {
     /**
      * 登陆成功返回内容
      * @return ResponseBody
+     * code and debug by tommy
      **/
     public <T> ResponseBody success(T data){
         ResponseBody<T> resp = new ResponseBody<T>();

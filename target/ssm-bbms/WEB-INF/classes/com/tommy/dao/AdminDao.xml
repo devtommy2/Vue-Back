@@ -12,7 +12,7 @@
         select * from t_student_information where username = #{username}
     </select>
 
-    <update id="adminUpdateUserInformation" parameterType="map" >
+    <update id="adminUpdateUserInformation" >
         update
             t_student_information
         set
@@ -52,6 +52,26 @@
 
     <delete id="deleteLineFormTeacherStudent" parameterType="int" >
         delete from t_teacher_student where student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteUserAutoMajor" parameterType="int" >
+        delete from t_auto_major where student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteUserSelectedMajor" parameterType="int" >
+        delete from t_major_student where student_id = #{student_id}
+    </delete>
+
+    <delete id="deleteUserSelectedUniversity" parameterType="int" >
+        delete from t_student_university where student_id = #{student_id}
+    </delete>
+
+    <select id="quaryUserIdIfExist" parameterType="int" resultType="int" >
+        select count(0) from t_student_information where id = #{student_id}
+    </select>
+
+    <delete id="deleteUserByUserId" parameterType="int" >
+        delete from t_student_informaiton where id = #{id}
     </delete>
 
 

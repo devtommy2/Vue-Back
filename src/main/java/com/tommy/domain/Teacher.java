@@ -1,5 +1,9 @@
 package com.tommy.domain;
 
+/**
+ * coding and debug by tommy
+ */
+
 public class Teacher {
 
     private String username;

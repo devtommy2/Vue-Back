@@ -46,23 +46,11 @@
         select identity from t_student_information where username = #{username}
     </select>
 
-    <select id="showUniversity" resultType="university">
-        select * from t_university
-    </select>
-
-    <select id="showUniversity_cache" resultType="university_cache">
-        select * from t_university
-    </select>
-
     <insert id="addUser" parameterType="map" >
         insert into
             t_student_information(username, password, st_name, st_mobile, st_mark, identity)
         values(#{username}, #{password}, #{st_name}, #{st_mobile}, #{st_mark}, "editor")
     </insert>
-
-    <select id="showMajor" resultType="major">
-        select * from major
-    </select>
 
     <select id="showTeacher" resultType="teacher" >
         select id, st_mobile, st_name, username from t_student_information where identity = "teacher"
@@ -72,99 +60,140 @@
         update t_student_information set teacher_id = #{teacher_id} where username = #{username}
     </update>
 
-    <select id="selectUniversityByCity" parameterType="string" resultType="university_cache" >
-        select * from t_university where Position = #{city}
-    </select>
-
     <select id="selectStudentIdByUsername" resultType="int" parameterType="string" >
         select id from t_student_information where username = #{username}
     </select>
 
-    <update id="clearCache" >
-        truncate table cache
+    <select id="selectAllCitiesUniversity" resultType="university" parameterType="string" >
+        select * from t_university where ${condition}
+    </select>
+
+    <select id="selectCitiesUniversity" parameterType="string" resultType="university" >
+        select
+               *
+        from
+             t_university
+        where
+              Position in ${condition}
+        order by
+                 school_code
+    </select>
+
+    <select id="selectUniversityByFuzzyName" parameterType="string" resultType="university" >
+        select * from t_university where Name like ${Name}
+    </select>
+
+    <select id="selectMajorByType" resultType="major" parameterType="string" >
+        select * from t_major_show where name in ${condition}
+    </select>
+
+    <select id="selectTypeDetails" parameterType="string" resultType="string" >
+        select name from t_major_show where type_detail in ${condition}
+    </select>
+
+    <select id="getMajorByFuzzySelect" resultType="major" parameterType="string" >
+        select * from t_major_show where name like ${condition}
+    </select>
+
+    <select id="getMajorJustLimitLevel" resultType="major" parameterType="string" >
+        select * from t_major_show where level1_name in ${level}
+    </select>
+
+    <select id="getMajorByNeeds" parameterType="string" resultType="major" >
+        select * from t_major_show where type_detail in ${sqlstring}
+    </select>
+
+    <select id="getStudentIdByUsername" resultType="int" parameterType="string" >
+        select id from t_student_information where username = #{username}
+    </select>
+
+    <insert id="insertIntoStudentUniversity" >
+        insert into t_student_university(student_id, university_id) values(#{student_id}, #{university_id})
+    </insert>
+
+    <select id="quaryUniversityIfExist" resultType="int" >
+        select count(0) from t_student_university where student_id = #{student_id} and university_id = #{university_id}
+    </select>
+
+    <select id="getUniversityIdByStudentId" resultType="int" parameterType="int" >
+        select university_id from t_student_university where student_id = #{student_id}
+    </select>
+
+    <select id="getUniversityByUniversityList" parameterType="string" resultType="university" >
+        select * from t_university where school_id in ${SQLString}
+    </select>
+
+    <delete id="deleteUniversityIdByStudentId" >
+        delete from t_student_university where student_id = #{student_id} and university_id = #{university_id}
+    </delete>
+
+    <select id="getUniversityNums" resultType="int" parameterType="int" >
+        select count(0) from t_student_university where student_id = #{student_id}
+    </select>
+
+    <select id="getMajorByUniversitySelected" parameterType="string" resultType="t_major" >
+        (select * from t_major where ${SQLString}) order by LowLevel      <!-- debug -->
+    </select>
+
+    <select id="getMajorWithoutUniversity" parameterType="string" resultType="t_major" >
+        (select * from t_major where ${SQLString}) order by LowLevel    <!-- debug -->
+    </select>
+
+    <insert id="insertIntoStudentMajor" >
+        insert into t_major_student(major_id, student_id) values(#{major_id}, #{student_id})
+    </insert>
+
+    <select id="getMajorId" resultType="int" parameterType="int" >
+        select major_id from t_major_student where student_id = #{student_id}
+    </select>
+
+    <select id="getMajorByMajorId" parameterType="string" resultType="t_major" >
+        select * from t_major where major_id in ${SQLString}
+    </select>
+
+    <select id="quaryMajorIfExist" resultType="int">
+        select count(0) from t_major_student where major_id = #{major_id} and student_id = #{student_id}
+    </select>
+
+    <select id="deleteMajorByStudent" >
+        delete from t_major_student where major_id = #{major_id} and student_id = #{student_id}
+    </select>
+
+    <select id="getUserInformation" resultType="userInformationShow" parameterType="int" >
+        select * from t_student_information where id = #{student_id}
+    </select>
+
+    <select id="countStudentUniversity" parameterType="int" resultType="int" >
+        select count(0) from t_student_university where student_id = #{student_id}
+    </select>
+
+    <select id="getScoreLevel" resultType="int" parameterType="int" >
+        select * from t_score_level where score = #{score}
+    </select>
+
+    <select id="getAutoMajor" parameterType="string" resultType="t_major" >
+        (select * from t_major where ${SQLString} limit 192) order by LowLevel
+    </select>
+
+    <select id="insertAutoMajorToDatabase" parameterType="string" >
+        replace into t_auto_major(student_id, major_id) values${SQLString}
+    </select>
+
+    <delete id="deleteAutoMajor" >
+        delete from t_auto_major where major_id = #{major_id} and student_id = #{student_id}
+    </delete>
+
+    <select id="getAutoMajorId" resultType="int" parameterType="int" >
+        select major_id from t_auto_major where student_id = #{student_id}
+    </select>
+
+    <update id="saveSelectedMajorOrder" parameterType="string" >
+        update t_major_student set major_id = CASE major_id ${SQLString}
     </update>
 
-    <select id="selectCache" resultType="university" >
-        select * from cache
-    </select>
-
-    <select id="selectCache_finally" resultType="university" >
-        select * from cache where student_id = #{student_id}
-    </select>
-
-    <insert id="insertListToCache" parameterType="university" >
-        insert into cache(KEY, Name , Manage, Position, Level, Province, s985, s211, FirstClassUniversity, FirstClassDiscipline, Postgraduate)
-        values
-        <foreach collection="list" index="index" item="item" separator=",">
-            (
-             #{item.KEY},
-             #{item.Name},
-             #{item.Manage},
-             #{item.Position},
-             #{item.Level},
-             #{item.Province},
-             #{item.s985},
-             #{item.s211},
-             #{item.FirstClassUniversity},
-             #{item.FirstClassDiscipline},
-             #{item.Postgraduate}
-            )
-        </foreach>
-    </insert>
-
-    <select id="selectCacheByLevelBaseOnCity" resultType="university" parameterType="string" >
-        select * from cache where ${level} = "T"
-    </select>
-
-    <insert id="insertListToCache_test" parameterType="university_cache" >
-        insert into cache(`student_id`, `KEY`, `Name`, `Manage`, `Position`, `Level`, `Province`, `s985`, `s211`, `FirstClassUniversity`, `FirstClassDiscipline`, `Postgraduate`)
-        values(#{student_id}, #{KEY}, #{Name}, #{Manage}, #{Position}, #{Level}, #{Province}, #{s985}, #{s211}, #{FirstClassUniversity}, #{FirstClassDiscipline}, #{Postgraduate})
-    </insert>
-
-
-    <delete id="deleteCacheBaseOnJYB" parameterType="int">
-        delete from cache where `Manage` != "教育部" and student_id = #{student_id}
-    </delete>
-
-    <delete id="deleteCacheNameJYB" parameterType="int">
-        delete from cache where `Manage` = "教育部" and student_id = #{student_id}
-    </delete>
-
-    <delete id="deleteCacheNot985" parameterType="int">
-        delete from cache where `s985` != "T" and student_id = #{student_id}
-    </delete>
-
-    <delete id="deleteCacheNot211" parameterType="int">
-        delete from cache where `s211` != "T" and student_id = #{student_id}
-    </delete>
-
-    <delete id="deleteCacheNotBK" parameterType="int">
-        delete from cache where `Level` != "本科" and student_id = #{student_id}
-    </delete>
-
-    <delete id="deleteCacheNotZK" parameterType="int">
-        delete from cache where `Level` != "专科" and student_id = #{student_id}
-    </delete>
-
-    <delete id="deleteCacheNotFirstRateUniversity" parameterType="int">
-        delete from cache where `FirstClassUniversity` != "T" and student_id = #{student_id}
-    </delete>
-
-    <delete id="deleteCacheNotFirstClassDisciplineUniversity" parameterType="int">
-        delete from cache where `FirstClassDiscipline` != "T" and student_id = #{student_id}
-    </delete>
-
-    <delete id="deleteCacheNotPostgraduate" >
-        delete from cache where `Postgraduate` != "T"
-    </delete>
-
-    <delete id="deleteCacheHavePostgraduate" >
-        delete from cache where `Postgraduate` = "T"
-    </delete>
-
-    <select id="selectInCities" parameterType="string" resultType="university_cache" >
-        select * from t_university where Position in ${cities}
-    </select>
+    <update id="saveAutoMajorOrder" parameterType="string" >
+        update t_auto_major set major_id = CASE major_id ${SQLString}
+    </update>
 
 
 

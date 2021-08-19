@@ -1,12 +1,15 @@
 package com.tommy.dao;
 
-import com.tommy.domain.Major;
-import com.tommy.domain.Teacher;
-import com.tommy.domain.University;
-import com.tommy.domain.University_cache;
+import com.tommy.domain.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
+
+
+/**
+ * code and debug by tommy
+ */
 
 public interface UserDao {
 
@@ -28,54 +31,74 @@ public interface UserDao {
 //    通过用户名获取用户身份
     String getIdentity(String username);
 
-//    获取所有的学校
-    List<University> showUniversity();
-    List<University_cache> showUniversity_cache();
-
     void addUser(Map<String, Object> map);
 
-    List<Major> showMajor();
+//    List<Major> showMajor();
 
     List<Teacher> showTeacher();
 
     void insertTeacherId(Map<String, Object> map);
 
-    // 接口一：用来接受处理的城市
-    List<University_cache> selectUniversityByCity(String city);
+    List<University> selectAllCitiesUniversity(String condition);
 
-    void insertListToCache(List<University> universityList);
+    List<University> selectCitiesUniversity(String condition);
 
-//    int clearCache();
-//
-//    List<University> selectCache();
-//
-//    List<University> selectCache_finally(Integer student_id);
-//
-//    List<University> selectCacheByLevelBaseOnCity(String level);
+    List<University> selectUniversityByFuzzyName(String Name);
 
-//    void insertListToCache_test(University_cache university_cache);
-//
-//    void deleteCacheBaseOnJYB(Integer student_id);
-//
-//    void deleteCacheNameJYB(Integer student_id);
-//
-//    void deleteCacheNot985(Integer student_id);
-//
-//    void deleteCacheNot211(Integer student_id);
-//
-//    void deleteCacheNotBK(Integer student_id);
-//
-//    void deleteCacheNotZK(Integer student_id);
+    List<Major> selectMajorByType(String condition);
 
-    Integer selectStudentIdByUsername(String username);
+    List<String> selectTypeDetails(String condition);
 
-//    void deleteCacheNotFirstRateUniversity(Integer student_id);
-//
-//    void deleteCacheNotFirstClassDisciplineUniversity(Integer student_id);
-//
-//    void deleteCacheNotPostgraduate();
-//
-//    void deleteCacheHavePostgraduate();
+    List<Major> getMajorByFuzzySelect(String condition);
 
-    List<University_cache> selectInCities(String cities);
+    List<Major> getMajorJustLimitLevel(String level);
+
+    Integer getStudentIdByUsername(String username);
+
+    void insertIntoStudentUniversity(@Param("student_id") Integer student_id, @Param("university_id") Integer university_id);
+
+    int quaryUniversityIfExist(@Param("student_id") Integer student_id,@Param("university_id") Integer university_id);
+
+    List<Integer> getUniversityIdByStudentId(Integer student_id);
+
+    List<University> getUniversityByUniversityList(String SQLString);
+
+    List<Major> getMajorByNeeds(String sqlstring);
+
+    Integer getUniversityNums(Integer student_id);
+
+    void deleteUniversityIdByStudentId(@Param("student_id") Integer student_id, @Param("university_id") Integer university_id);
+
+    List<T_Major> getMajorByUniversitySelected(String SQLString);
+
+    List<T_Major> getMajorWithoutUniversity(String SQLString);
+
+    void insertIntoStudentMajor(@Param("student_id") Integer student_id, @Param("major_id") Integer major_id);
+
+    List<Integer> getMajorId(Integer student_id);
+
+    List<T_Major> getMajorByMajorId(String SQLString);
+
+    int quaryMajorIfExist(@Param("student_id") Integer student_id, @Param("major_id") Integer major_id);
+
+    void deleteMajorByStudent(@Param("student_id") Integer student_id, @Param("major_id") Integer major_id);
+
+    List<UserInformationShow> getUserInformation(Integer student_id);
+
+    int countStudentUniversity(Integer student_id);
+
+    List<Integer> getScoreLevel(Integer score);
+
+    List<T_Major> getAutoMajor(String SQLString);
+
+    void insertAutoMajorToDatabase(String SQLString);
+
+    void deleteAutoMajor(@Param("student_id") Integer student_id, @Param("major_id") Integer major_id);
+
+    List<Integer> getAutoMajorId(Integer student_id);
+
+    void saveSelectedMajorOrder(String SQLString);
+
+    void saveAutoMajorOrder(String SQLString);
+
 }

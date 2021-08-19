@@ -11,7 +11,7 @@ public class JJwtUtils {
 
     /**
      * 生成jwt
-     * code by tommy
+     * code and debug by tommy
      * @param username
      * @return
      */

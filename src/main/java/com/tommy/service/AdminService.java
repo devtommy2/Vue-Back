@@ -1,18 +1,20 @@
 package com.tommy.service;
 
 import com.tommy.domain.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * coding and debug by tommy
+ */
+
 public interface AdminService {
 
-//    =============================    bug   ======
     List<User> showUserExceptAdmin(String identity);
-//=================================================
-    User showSingleUserExceptAdmin(String username);
 
-    void adminUpdateUserInformation(Map<String, Object> map);
+    User showSingleUserExceptAdmin(String username);
 
     void adminTeacherSignUp(Map<String, Object> map);
 
@@ -21,5 +23,11 @@ public interface AdminService {
     void deleteUser(String username);
 
     int selectTeacherIdByUsername(String username);
+
+    int quaryUserIdIfExist(Integer student_id);
+
+    void deleteUserByUserId(Integer id);
+
+    void adminUpdateUserInformation(String st_name, Integer st_mark, String st_mobile, String username);
 
 }

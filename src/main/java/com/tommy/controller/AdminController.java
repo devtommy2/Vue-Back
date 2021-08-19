@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public class AdminController {
     private AdminService adminService;
 
     /**
+     * code and debug by tommy
+     *
      * 在这里面进行的是admin的业务管理
      * 主要包括的业务逻辑有：
      * 1. 分页查询出所有用户(老师，学生)，接收前端发来的数据：identity进行查询具体的身份信息数据
@@ -32,22 +35,37 @@ public class AdminController {
      */
 
 //    按身份查找所有想看的用户信息
-    @RequestMapping(value = "/showUserExceptAdmin", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
-    public PageInfo<User> showUserExceptAdmin(int pageNum, int pageSize, String identity) {
+    @RequestMapping(value = "/showUserExceptAdmin", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public PageInfo<User> showUserExceptAdmin(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        Integer pageNum = (Integer) map.get("pageNum");
+        Integer pageSize = (Integer) map.get("pageSize");
+        String identity = (String) map.get("identity");
+
         PageHelper.startPage(pageNum, pageSize);
         List<User> userList = adminService.showUserExceptAdmin(identity);
         PageInfo<User> pageInfo = new PageInfo<>(userList);
         return pageInfo;
     }
 
-    @RequestMapping(value = "/showSingleUserExceptAdmin", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
+    @RequestMapping(value = "/showSingleUserExceptAdmin", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
     public User showSingleUserExceptAdmin(String username) {
         return adminService.showSingleUserExceptAdmin(username);
     }
 
     @RequestMapping(value = "/adminUpdateUserInformation", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
     public ResponseBody adminUpdateUserInformation(@RequestBody Map<String, Object> map) {
-        adminService.adminUpdateUserInformation(map);
+        String name = (String) map.get("st_name");
+        Integer mark = (Integer) map.get("st_mark");
+        String telephone = (String) map.get("st_mobile");
+        String username = (String) map.get("username");
+
+        for(int i = 0; i < 100; i ++ ) {
+            System.out.println(map);
+        }
+
+
+
+        adminService.adminUpdateUserInformation(name, mark, telephone, username);
         return new AssembleResponseMsg().success("update success!");     // change user's information
     }
 
@@ -80,11 +98,8 @@ public class AdminController {
         if (flag == 1) {
             //存在用户，执行操作
             adminService.deleteUser(username);
-            return new AssembleResponseMsg().success("delete success");
+            return new AssembleResponseMsg().success("删除成功~~~");
         }
-        return new AssembleResponseMsg().failure(200, 400, "delete failed");
+        return new AssembleResponseMsg().failure(200, 400, "删除失败~~~");
     }
-
-
-
 }

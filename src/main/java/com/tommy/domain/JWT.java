@@ -1,5 +1,10 @@
 package com.tommy.domain;
 
+/**
+ * coding and debug by tommy
+ */
+
+
 public class JWT {
     // 默认是200，代表访问正确  success
     private Integer StatueCode = 200;

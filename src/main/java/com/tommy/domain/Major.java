@@ -1,236 +1,155 @@
 package com.tommy.domain;
 
+/**
+ * coding and debug by tommy
+ */
+
 public class Major {
 
-    /**
-     * id
-     * Name
-     * Manage
-     * Position
-     * Level
-     * Province
-     * s985
-     * s211
-     * FirstClassUniversity
-     * FirstClassDiscipline
-     * Postgraduate
-     * Major
-     * LowestAdmission
-     * EnrollmentYear
-     * AdmissionsRestrictions
-     * Physics
-     * Chemical
-     *
-     * Biology
-     * Politics
-     * History
-     *
-     * Geography
-     */
-    private String Name;
-    private String Major;
-    private String LowestAdmission;
-    private String EnrollmentYear;
-    private String AdmissionsRestrictions;
-    private String Physics;
-    private String Chemical;
-    private String Biology;
-    private String Politics;
-    private String History;
-    private String Geography;
-    private String Manage;               //
-    private String Position;               //
-    private String Level;               //
-    private String Province;
-    private String s985;
-    private String s211;
-    private String FirstClassUniversity;               //
-    private String FirstClassDiscipline;               //
-    private String Postgraduate;               //
+    private Integer id;
+    private String name;
+    private String code;
+    private String is_what;
+    private String learn_what;
+    private String do_what;
+    private String degree;
+    private String direction;
+    private String celebrity;
+    private String course;
+    private String type;
+    private String type_detail;
+    private String level1_name;
+    private String rate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
-    public void setName(String Name) {
-        this.Name = Name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getMajor() {
-        return Major;
+    public String getCode() {
+        return code;
     }
 
-    public void setMajor(String Major) {
-        this.Major = Major;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getLowestAdmission() {
-        return LowestAdmission;
+    public String getIs_what() {
+        return is_what;
     }
 
-    public void setLowestAdmission(String LowestAdmission) {
-        this.LowestAdmission = LowestAdmission;
+    public void setIs_what(String is_what) {
+        this.is_what = is_what;
     }
 
-    public String getEnrollmentYear() {
-        return EnrollmentYear;
+    public String getLearn_what() {
+        return learn_what;
     }
 
-    public void setEnrollmentYear(String EnrollmentYear) {
-        this.EnrollmentYear = EnrollmentYear;
+    public void setLearn_what(String learn_what) {
+        this.learn_what = learn_what;
     }
 
-    public String getAdmissionsRestrictions() {
-        return AdmissionsRestrictions;
+    public String getDo_what() {
+        return do_what;
     }
 
-    public void setAdmissionsRestrictions(String AdmissionsRestrictions) {
-        this.AdmissionsRestrictions = AdmissionsRestrictions;
+    public void setDo_what(String do_what) {
+        this.do_what = do_what;
     }
 
-    public String getPhysics() {
-        return Physics;
+    public String getDegree() {
+        return degree;
     }
 
-    public void setPhysics(String Physics) {
-        this.Physics = Physics;
+    public void setDegree(String degree) {
+        this.degree = degree;
     }
 
-    public String getChemical() {
-        return Chemical;
+    public String getDirection() {
+        return direction;
     }
 
-    public void setChemical(String Chemical) {
-        this.Chemical = Chemical;
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 
-    public String getBiology() {
-        return Biology;
+    public String getCelebrity() {
+        return celebrity;
     }
 
-    public void setBiology(String Biology) {
-        this.Biology = Biology;
+    public void setCelebrity(String celebrity) {
+        this.celebrity = celebrity;
     }
 
-    public String getPolitics() {
-        return Politics;
+    public String getCourse() {
+        return course;
     }
 
-    public void setPolitics(String Politics) {
-        this.Politics = Politics;
+    public void setCourse(String course) {
+        this.course = course;
     }
 
-    public String getHistory() {
-        return History;
+    public String getType() {
+        return type;
     }
 
-    public void setHistory(String History) {
-        this.History = History;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getGeography() {
-        return Geography;
+    public String getType_detail() {
+        return type_detail;
     }
 
-    public void setGeography(String Geography) {
-        this.Geography = Geography;
+    public void setType_detail(String type_detail) {
+        this.type_detail = type_detail;
     }
 
-    public String getManage() {
-        return Manage;
+    public String getLevel1_name() {
+        return level1_name;
     }
 
-    public void setManage(String Manage) {
-        this.Manage = Manage;
+    public void setLevel1_name(String level1_name) {
+        this.level1_name = level1_name;
     }
 
-    public String getPosition() {
-        return Position;
+    public String getRate() {
+        return rate;
     }
 
-    public void setPosition(String Position) {
-        this.Position = Position;
-    }
-
-    public String getLevel() {
-        return Level;
-    }
-
-    public void setLevel(String Level) {
-        this.Level = Level;
-    }
-
-    public String getProvince() {
-        return Province;
-    }
-
-    public void setProvince(String Province) {
-        this.Province = Province;
-    }
-
-    public String getS985() {
-        return s985;
-    }
-
-    public void setS985(String s985) {
-        this.s985 = s985;
-    }
-
-    public String getS211() {
-        return s211;
-    }
-
-    public void setS211(String s211) {
-        this.s211 = s211;
-    }
-
-    public String getFirstClassUniversity() {
-        return FirstClassUniversity;
-    }
-
-    public void setFirstClassUniversity(String FirstClassUniversity) {
-        this.FirstClassUniversity = FirstClassUniversity;
-    }
-
-    public String getFirstClassDiscipline() {
-        return FirstClassDiscipline;
-    }
-
-    public void setFirstClassDiscipline(String FirstClassDiscipline) {
-        this.FirstClassDiscipline = FirstClassDiscipline;
-    }
-
-    public String getPostgraduate() {
-        return Postgraduate;
-    }
-
-    public void setPostgraduate(String Postgraduate) {
-        this.Postgraduate = Postgraduate;
+    public void setRate(String rate) {
+        this.rate = rate;
     }
 
     @Override
     public String toString() {
         return "Major{" +
-                "Name='" + Name + '\'' +
-                ", Major='" + Major + '\'' +
-                ", LowestAdmission='" + LowestAdmission + '\'' +
-                ", EnrollmentYear='" + EnrollmentYear + '\'' +
-                ", AdmissionsRestrictions='" + AdmissionsRestrictions + '\'' +
-                ", Physics='" + Physics + '\'' +
-                ", Chemical='" + Chemical + '\'' +
-                ", Biology='" + Biology + '\'' +
-                ", Politics='" + Politics + '\'' +
-                ", History='" + History + '\'' +
-                ", Geography='" + Geography + '\'' +
-                ", Manage='" + Manage + '\'' +
-                ", Position='" + Position + '\'' +
-                ", Level='" + Level + '\'' +
-                ", Province='" + Province + '\'' +
-                ", s985='" + s985 + '\'' +
-                ", s211='" + s211 + '\'' +
-                ", FirstClassUniversity='" + FirstClassUniversity + '\'' +
-                ", FirstClassDiscipline='" + FirstClassDiscipline + '\'' +
-                ", Postgraduate='" + Postgraduate + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", is_what='" + is_what + '\'' +
+                ", learn_what='" + learn_what + '\'' +
+                ", do_what='" + do_what + '\'' +
+                ", degree='" + degree + '\'' +
+                ", direction='" + direction + '\'' +
+                ", celebrity='" + celebrity + '\'' +
+                ", course='" + course + '\'' +
+                ", type='" + type + '\'' +
+                ", type_detail='" + type_detail + '\'' +
+                ", level1_name='" + level1_name + '\'' +
+                ", rate='" + rate + '\'' +
                 '}';
     }
 }

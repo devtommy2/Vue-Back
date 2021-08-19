@@ -3,6 +3,10 @@ package com.tommy.domain;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * code and debug by tommy
+ */
+
 public class DateUtil {
     
     public static String getCurrentDateStr(String pattern){

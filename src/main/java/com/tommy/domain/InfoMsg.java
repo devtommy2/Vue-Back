@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 功能描述：错误信息消息体
+ * coding and debug by tommy
  */
 
 public class InfoMsg implements Serializable {

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 功能描述：封装响应的数据结构
+ * coding and debug by tommy
  */
 public class ResponseBody<T> implements Serializable {
     //时间

@@ -6,6 +6,8 @@ import com.tommy.common.AssembleResponseMsg;
 import com.tommy.common.jwt.JJwtUtils;
 import com.tommy.domain.*;
 import com.tommy.domain.ResponseBody;
+import com.tommy.domain.saveOrderUtils.OptimizationSaveOrder;
+import com.tommy.domain.utils.SwitchToEnglish;
 import com.tommy.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -15,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-
 /**
  * @Author tommy
- *   code by tommy
+ *   code and debug by tommy
  */
+
 @RestController
 @RequestMapping("/User")
 
@@ -38,26 +40,19 @@ public class UserController {
     public ResponseBody queryUser(HttpServletRequest request, @RequestBody Map<String, Object> map){
 
 
-        //=====================================================================
-        for(int i = 0; i < 1000; i ++ ) {
-            System.out.println(map);
-        }
-        //=====================================================================
 
         Map<String,String> all = new HashMap<>();
 
-        JJwtUtils jwtUtils = new JJwtUtils(); // 创建实例，可获取到token
+        JJwtUtils jwtUtils = new JJwtUtils();
 
-        // 需要前端将username储存到请求头中
         String username_header = request.getHeader("username");
 
-//        String username = (String) map.get("username");    // Map获取username
-        String identity_header = request.getHeader("identity");  // header中获取 admin/ editor/ teacher
+        String identity_header = request.getHeader("identity");
 
-        String tokenStr = request.getHeader("token");   // 从头中得到的token
+        String tokenStr = request.getHeader("token");
+
 
         if (tokenStr != null) {
-//               验证后存在token，直接登陆，一定存在该用户
             JWT jwt = jwtUtils.checkJWT(tokenStr, username_header, identity_header);
             if (jwt.getStatueCode() == 200 && jwt.getStatueMessage().equals("jwt验证成功")) {
                 // ***** debug by tommy
@@ -67,15 +62,14 @@ public class UserController {
             } else {
                 return new AssembleResponseMsg().failure(200, jwt.getStatueCode(), jwt.getStatueMessage());
             }
-        } else {  // 不存在token，新生成token
+        } else {
             int flag = userService.queryUser(map);
-            if (flag == 1) {  // 数据库里存在该用户, 允许生成token
+            if (flag == 1) {
                 String username_login = (String) map.get("username");
                 String identity_login = userService.getIdentity(username_login);
-                String token_new = jwtUtils.CreateJwt(username_login, identity_login);  // 初次登陆，如果没有token直接生成一个token
+                String token_new = jwtUtils.CreateJwt(username_login, identity_login);
                 all.put("identity", identity_login);
-                all.put("token", token_new);   // 需要前端获取到数据后将token储存到请求头里！
-                // 登陆成功后前端将username, identity, token储存到请求头中
+                all.put("token", token_new);
                 all.put("username", username_login);
                 return new AssembleResponseMsg().success(all);
             } else {
@@ -158,29 +152,6 @@ public class UserController {
         }
     }
 
-
-    //    院校库的信息显示：
-//    支持分页查询，需要前端发送参数：pageNum， pageSize，请求方式为GET请求
-//    该信息展示功能为所有用户均能看到的信息界面，不做特殊化，若能登录就能看
-    @RequestMapping(value = "/showUniversity", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
-    public PageInfo<University> showUniversity(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<University> universityList = userService.showUniversity();
-        PageInfo<University> pageInfo = new PageInfo<>(universityList);
-        return pageInfo;
-    }
-
-
-//    查看=所有的专业;
-    @RequestMapping(value = "/showMajor", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
-    public PageInfo<Major> showMajor(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Major> majorList = userService.showMajor();
-        PageInfo<Major> pageInfo = new PageInfo<>(majorList);
-        return pageInfo;
-    }
-
-
 //    向学生展示老师的个人信息以供选择;
     @RequestMapping(value = "/showTeacher", produces = "application/json;charset=utf-8", method = RequestMethod.GET)
     public PageInfo<Teacher> showTeacher(int pageNum, int pageSize) {
@@ -210,68 +181,464 @@ public class UserController {
         return new AssembleResponseMsg().success("添加成功");
     }
 
-    @RequestMapping(value = "/selectUniversityByCity", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
-    public PageInfo<University_cache> selectUniversityByCity(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+    @RequestMapping(value = "/showUniversityByNeed", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public PageInfo<University> showUniversityByNeed(HttpServletRequest request, @RequestBody Map<String, Object> map) {
 
-//        String tokenStr = request.getHeader("token");
-//        JJwtUtils jwtUtils = new JJwtUtils(); // Create
-//        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
-//        String username = (String) jws.getBody().get("username");
+        String tokenStr = request.getHeader("token");
 
+        List<String> cityList = (List<String>) map.get("Position");
 
-        String username = (String) map.get("username");
+        String manager = (String) map.get("Manage");   // 所属部门
 
-        Integer id = userService.selectStudentIdByUsername(username);
+        String level = (String) map.get("Level");   // 985院校  211院校
 
-        List<String> cityList = (List<String>) map.get("Position");     /// city[1, 2, 3.........]   必拼
+        String layer = (String) map.get("Layer");   // 本科  专科
 
-        String manager = (String) map.get("Manage");      // 教育部，其他部委，地方，军校，全部     // 拼接条件一
-
-        String level = (String) map.get("Level");      // 985院校， 211院校， 全部     // 拼接条件2
-
-        String layer = (String) map.get("Layer");      //全部  本科    高职（专科）    // 拼接条件3
-
-        String features = (String) map.get("Features");     //    全部     一流大学建设高校     一流学科建设高校   // 拼接条件4
-
-        String switchVal = (String) map.get("SwitchVal");    //     T   F        // 拼接条件5
+        String features = (String) map.get("Features");  // T双一流   F不是
 
         Integer pageNum = (Integer) map.get("pageNum");
 
         Integer pageSize = (Integer) map.get("pageSize");
 
-        PageHelper.startPage(pageNum, pageSize);
 
-        cityList.removeAll(Collections.singleton(null));   // 取出空字符串
+        cityList.removeAll(Collections.singleton(null));  // 取出空字符串
+
+        PageHelper.startPage(pageNum, pageSize);
 
         int length = cityList.size();
 
         if (length == 0) {
-            // 对所有的城市进行筛选, 无限制
-            List<University_cache> universityList = userService.showUniversity_cache();
-            for(int i = 0; i < universityList.size(); i ++ ) {
-            }
-            return null;
+            OptimizationAllCity optimizationAllCity = new OptimizationAllCity();
+            String together = optimizationAllCity.stringTogethers(manager, level, layer, features);
+            List<University> universityList = userService.selectAllCitiesUniversity(together);
+            PageInfo<University> pageInfo = new PageInfo<>(universityList);
+
+            PageHelper.clearPage();
+            return pageInfo;
+        } else {
+            Optimization optimization = new Optimization();
+            String together = optimization.StringTogether(cityList, manager, level, layer, features);
+            List<University> universityList = userService.selectCitiesUniversity(together);
+            PageInfo<University> pageInfo = new PageInfo<>(universityList);
+
+            PageHelper.clearPage();
+            return pageInfo;
+        }
+
+    }
+
+    // University_name Fuzzy select
+    @RequestMapping(value = "/getUniversityByName", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public List<University> getUniversityByName(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        String Name = (String) map.get("Name");
+
+        if (!Name.equals("")) {
+            OptimizationFuzzy optimizationFuzzy = new OptimizationFuzzy();
+
+            String together = optimizationFuzzy.getOptimizationFuzzyString(Name);
+
+            return userService.selectUniversityByFuzzyName(together);
+        }
+        return null;
+    }
+
+
+    // 显示专业库：
+    @RequestMapping(value = "/showMajorByNeeds", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public PageInfo<Major> showMajorByNeeds(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        Integer pageNum = (Integer) map.get("pageNum");
+
+        Integer pageSize = (Integer) map.get("pageSize");
+
+        List<String> majorList = (List<String>) map.get("type_detail");
+
+        majorList.removeAll(Collections.singleton(null));
+
+        String Level = (String) map.get("level1_name");
+
+        int majorSize = majorList.size();
+
+        if (majorSize == 0) {
+
+            String SQLString = new Optimization().getAllMajorNameJustLimitByLevel(Level);
+            PageHelper.startPage(pageNum, pageSize);
+            List<Major> majorList1 = userService.getMajorJustLimitLevel(SQLString);
+            PageInfo<Major> pageInfo = new PageInfo<>(majorList1);
+            PageHelper.clearPage();
+            return pageInfo;
         } else {
 
-            Optimization optimization = new Optimization();
-            String together = optimization.StringTogether(cityList, manager, level, layer, features, switchVal);
-            List<University_cache> university_caches = userService.selectInCities(together);   // 得到拼接结果
-            PageInfo<University_cache> pageInfo = new PageInfo<>(university_caches);
+            String majorListMoreDetail = new OptimizationGetDetail().getDetailMajor(majorList);
 
-            for(int i = 0; i < 1; i ++ ) {
-                System.out.println(university_caches);
-            }
+            PageHelper.startPage(pageNum, pageSize);
 
+            List<Major> majorList1 = userService.getMajorByNeeds(majorListMoreDetail);
+
+            PageInfo<Major> pageInfo = new PageInfo<>(majorList1);
+
+            PageHelper.clearPage();
             return pageInfo;
+        }
+
+    }
+
+    @RequestMapping(value = "/showMajorByFuzzy", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public List<Major> showMajorByFuzzy(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        String FuzzyString = (String) map.get("FuzzyString");
+
+        String FuzzySQLString = new OptimizationSearchFuzzyMajor().getOptimizationSearchFuzzyMajor(FuzzyString);
+
+        return userService.getMajorByFuzzySelect(FuzzySQLString);
+    }
+
+    // 学生挑选学校
+    @RequestMapping(value = "/selectUniversityByStudent", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public ResponseBody selectUniversityByStudent(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+
+        Integer student_id = userService.getStudentIdByUsername(username);
+        Integer university_id = (Integer) map.get("university_id");
+        Integer university_nums = userService.getUniversityNums(student_id);
+
+        int flag = userService.quaryUniversityIfExist(student_id, university_id);
+
+        if (university_nums <= 90) {
+            if (flag != 0) {
+                return new AssembleResponseMsg().failure(200, 400, "该学校已被选择，换个学校试试吧~~~");
+            } else {
+                userService.insertIntoStudentUniversity(student_id, university_id);
+                return new AssembleResponseMsg().success("添加学校成功~~~");
+            }
+        } else {
+            return new AssembleResponseMsg().failure(200, 400, "备选学校数量最大为90个~~~");
+        }
+    }
+
+    // 学生查看自己选择的学校（不是专业）
+    @RequestMapping(value = "/showUniversitySelected", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public List<University> showUniversitySelected(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+
+        Integer student_id = userService.getStudentIdByUsername(username);
+
+        List<Integer> University_id_list = userService.getUniversityIdByStudentId(student_id);
+
+        if (University_id_list.size() == 0) {
+            return null;
+        }
+
+        String SQLString = new Optimization().getAllUniversityInfoByUniversityId(University_id_list);
+
+        return userService.getUniversityByUniversityList(SQLString);
+    }
+
+    // 删除选择的学校：   需求：需要删除的学校id
+    @RequestMapping(value = "/deleteUniversitySelected", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public ResponseBody deleteUniversitySelected(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+        Integer university_id = (Integer) map.get("university_id");
+        if (userService.quaryUniversityIfExist(student_id, university_id) != 0) {
+            userService.deleteUniversityIdByStudentId(student_id, university_id);
+            return new AssembleResponseMsg().success("删除成功~~");
+        } else {
+            return new AssembleResponseMsg().success("这个学校已经不在您的院校库啦~~");
         }
     }
 
 
+    /**
+     * 从选择的学校中生成专业
+     * 该处理器方法仅供调用按钮处理使用
+     */
+    @RequestMapping(value = "/showMajorFromSelectUniversity", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public PageInfo<T_Major> showMajorFromSelectUniversity(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+
+        Integer pageNum = (Integer) map.get("pageNum");
+
+        Integer pageSize = (Integer) map.get("pageSize");
+
+        Integer lowLevel = (Integer) map.get("lowLevel");
+
+        String batch = (String) map.get("batch");
+
+        List<String> majorList = (List<String>) map.get("majorList");
+
+        List<String> subjectList = (List<String>) map.get("subject");
+
+        List<String> subjectLists = new SwitchToEnglish().switchToEnglish(subjectList);
+
+        // 得到学校的id集合
+        List<Integer> University_id_list = userService.getUniversityIdByStudentId(student_id);
+
+
+        if (University_id_list.size() == 0) {
+            return null;
+        } else {
+
+            String SQLString = new Optimization().getMajorByUniversitySelected(University_id_list, batch, lowLevel, majorList, subjectLists);
+
+            PageHelper.startPage(pageNum, pageSize);
+            List<T_Major> t_majors = userService.getMajorByUniversitySelected(SQLString);
+            PageInfo<T_Major> pageInfo = new PageInfo<>(t_majors);
+
+            PageHelper.clearPage();
+            return pageInfo;
+        }
+    }
+
+    /**
+     * 按钮：点击 “显示所有”及其默认加载的页面都是这个接口
+     * @param request
+     * @param map
+     * @return
+     */
+
+    @RequestMapping(value = "/showMajorWithoutUniversity", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public PageInfo<T_Major> showMajorWithoutUniversity(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        Integer pageNum = (Integer) map.get("pageNum");
+
+        Integer pageSize = (Integer) map.get("pageSize");
+
+        Integer lowLevel = (Integer) map.get("lowLevel");
+
+        String batch = (String) map.get("batch");
+
+        List<String> majorList = (List<String>) map.get("majorList");
+
+        List<String> subjectList = (List<String>) map.get("subject");
+
+        // replaceAll
+        List<String> subjectLists = new SwitchToEnglish().switchToEnglish(subjectList);
+
+        // 直接拼接sql语句
+        /**
+         * select * from t_major where .......
+         */
+
+        String SQLString = new Optimization().getMajorWithoutUniversity(majorList, subjectLists, lowLevel, batch);
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<T_Major> t_majors = userService.getMajorWithoutUniversity(SQLString);
+        PageInfo<T_Major> pageInfo = new PageInfo<>(t_majors);
+
+        return pageInfo;
+
+    }
+
+    // 学生自主添加专业到备选栏中：
+    @RequestMapping(value = "/insertMajorIntoDatabase", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public ResponseBody insertMajorIntoDatabase(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+        Integer major_id = (Integer) map.get("major_id");
+
+        int flag = userService.quaryMajorIfExist(student_id, major_id);
+
+        if (flag != 0) {
+            return new AssembleResponseMsg().failure(200, 400, "该专业已经被选择，换个专业看看吧~~~");
+        } else {
+            userService.insertIntoStudentMajor(student_id, major_id);
+            return new AssembleResponseMsg().success("添加专业成功~~~");
+        }
+
+    }
+
+    // 显示学生选择的专业
+    @RequestMapping(value = "/showMajorSelected", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public List<T_Major> showMajorSelected(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+
+        // 获取到学生所选择的所有专业的id
+        List<Integer> majorId = userService.getMajorId(student_id);
+
+        if (majorId.size() == 0) {
+            return null;
+        } else {
+            // 根据id 拿到专业信息
+            String SQLString = new Optimization().getMajorByMajorIDSQLString(majorId);
+            List<T_Major> majorList = userService.getMajorByMajorId(SQLString);
+            return majorList;
+        }
+    }
+
+    // 删除学生选择的专业：
+    @RequestMapping(value = "/deleteMajorByStudent", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public ResponseBody deleteMajorByStudent(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+        Integer major_id = (Integer) map.get("major_id");
+        userService.deleteMajorByStudent(student_id, major_id);
+        return new AssembleResponseMsg().success("删除成功~~");
+    }
+
+    @RequestMapping(value = "/getUserInformation", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public List<UserInformationShow> getUserInformation(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        return userService.getUserInformation(userService.getStudentIdByUsername(username));
+    }
+
+
+    // 一分一段的查询：
+    @RequestMapping(value = "/getScoreLevel", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public List<Integer> getScoreLevel(@RequestBody Map<String, Object> map) {
+        Integer score = (Integer) map.get("score");
+        return userService.getScoreLevel(score);
+    }
 
 
 
+//     一键生成96个志愿
+    @RequestMapping(value = "/getAutoMajor", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public List<T_Major> getAutoMajor(HttpServletRequest request, @RequestBody Map<String, Object> map) {
 
+        Integer lowLevel = (Integer) map.get("lowLevel");    // 获取到位次
+
+        String batch = (String) map.get("batch");   // 获取到需求，本科和专科
+
+        List<String> majorList = (List<String>) map.get("majorList");
+
+        List<String> subjectList = (List<String>) map.get("subject");    // 选课的数组
+
+        List<String> subjectLists = new SwitchToEnglish().switchToEnglish(subjectList);
+
+//        拼接SQL
+        String SQLString = new Optimization().getMajorWithoutUniversity(majorList, subjectLists, lowLevel, batch);
+
+        return userService.getAutoMajor(SQLString);
+    }
+
+    // 提交至数据库
+
+    @RequestMapping(value = "/submitAutoMajorToDataBase", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public ResponseBody submitAutoMajorToDataBase(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+
+        List<Integer> majorId = (List<Integer>) map.get("majorId");
+
+        if (majorId.size() == 0) {
+            return new AssembleResponseMsg().failure(200, 400, "添加失败");
+        } else {
+            String SQLString = new Optimization().InsertAutoMajorToDatabase(majorId, student_id);
+
+            userService.insertAutoMajorToDatabase(SQLString);
+
+            return new AssembleResponseMsg().success("添加成功，请到个人自动院校库中查看~~~");
+        }
+    }
+
+    // 删除自动生成的专业：
+    @RequestMapping(value = "/deleteMajorByAuto", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public ResponseBody deleteMajorByAuto(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+        Integer major_id = (Integer) map.get("major_id");
+        userService.deleteAutoMajor(student_id, major_id);
+        return new AssembleResponseMsg().success("删除成功~~");
+    }
+
+    // 查看自动生成的专业:
+    @RequestMapping(value = "/showMajorAuto", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public List<T_Major> showMajorAuto(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+
+        // 获取到学生所选择的所有专业的id
+        List<Integer> majorId = userService.getAutoMajorId(student_id);
+
+        if (majorId.size() == 0) {
+            return null;
+        } else {
+            // 根据id 拿到专业信息
+            String SQLString = new Optimization().getMajorByMajorIDSQLString(majorId);
+            List<T_Major> majorList = userService.getMajorByMajorId(SQLString);
+            return majorList;
+        }
+    }
+
+    // 更新数据库以保存自选专业的顺序
+    @RequestMapping(value = "/saveMajorSelectedOrder", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public ResponseBody saveMajorSelectedOrder(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+
+        List<Integer> major_id = (List<Integer>) map.get("major_id");
+
+        List<Integer> old_major_id = userService.getMajorId(student_id);
+
+        String SQLString = new OptimizationSaveOrder().saveSelectedMajorOrder(old_major_id, major_id, student_id);
+
+        userService.saveSelectedMajorOrder(SQLString);
+
+        return new AssembleResponseMsg().success("保存成功~~~");
+    }
+
+    @RequestMapping(value = "/saveAutoMajorOrder", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    public ResponseBody saveAutoMajorOrder(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+        String tokenStr = request.getHeader("token");
+        JJwtUtils jwtUtils = new JJwtUtils();
+        Jws<Claims> jws = jwtUtils.readingJwt(tokenStr);
+        String username = (String) jws.getBody().get("username");
+        Integer student_id = userService.getStudentIdByUsername(username);
+
+        List<Integer> major_id = (List<Integer>) map.get("major_id");
+
+        List<Integer> old_major_id = userService.getAutoMajorId(student_id);
+
+        String SQLString = new OptimizationSaveOrder().saveAutoMajorOrder(old_major_id, major_id, student_id);
+
+        userService.saveAutoMajorOrder(SQLString);
+
+        return new AssembleResponseMsg().success("保存成功~~~");
+    }
 }
-
-
 
